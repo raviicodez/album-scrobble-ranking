@@ -1,9 +1,8 @@
 const API_KEY = "35fa1135e4537fe8cfb15fc69f95064e"
 
 const users = [
-"usuario1",
-"usuario2",
-"usuario3"
+"rkivedisc",
+"proudhsk"
 ]
 
 const artist = "BTS"
