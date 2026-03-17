@@ -9,7 +9,7 @@ const users = [
 ]
 
 const artist = "BTS"
-const album = "Map of the Soul: 7"
+const album = "BE"
 
 
 document.getElementById("album-info").innerHTML =
