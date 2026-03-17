@@ -1,12 +1,6 @@
-const API_KEY = "35fa1135e4537fe8cfb15fc69f95064e"
+document.getElementById("album-info").innerHTML =
+`${artist} — ${album}`
 
-const users = [
-"rkivedisc",
-"proudhsk"
-]
-
-const artist = "BTS"
-const album = "BE"
 
 async function getScrobbles(user){
 
@@ -52,11 +46,19 @@ results.sort((a,b)=>b.plays-a.plays)
 
 let table = document.getElementById("ranking")
 
+table.innerHTML = ""
+
 results.forEach((r,i)=>{
+
+let medal=""
+
+if(i===0) medal="🥇"
+if(i===1) medal="🥈"
+if(i===2) medal="🥉"
 
 table.innerHTML += `
 <tr>
-<td>${i+1}</td>
+<td class="medal">${medal || (i+1)}</td>
 <td>${r.user}</td>
 <td>${r.plays}</td>
 </tr>
