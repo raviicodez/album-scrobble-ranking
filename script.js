@@ -10,10 +10,12 @@ const album = "Map of the Soul: 7"
 
 async function getScrobbles(user){
 
-let url = `https://ws.audioscrobbler.com/2.0/?method=user.gettopalbums&user=${user}&api_key=${API_KEY}&format=json`
+let url = `https://ws.audioscrobbler.com/2.0/?method=user.gettopalbums&user=${user}&api_key=${API_KEY}&format=json&limit=1000`
 
 let res = await fetch(url)
 let data = await res.json()
+
+if(!data.topalbums) return 0
 
 let albums = data.topalbums.album
 
