@@ -2,8 +2,27 @@ body{
 font-family: Arial, sans-serif;
 background:#0f0f0f;
 color:white;
+margin:0;
 text-align:center;
 }
+
+/* HEADER */
+
+header{
+background:#111;
+padding:12px 20px;
+display:flex;
+justify-content:flex-end;
+border-bottom:1px solid #222;
+}
+
+.header-title{
+font-weight:bold;
+letter-spacing:2px;
+color:#fff;
+}
+
+/* CONTAINER */
 
 .container{
 max-width:600px;
@@ -11,19 +30,35 @@ margin:auto;
 padding:20px;
 }
 
-h1{
-margin-bottom:10px;
+/* ALBUM CARD */
+
+#album-card{
+margin:20px 0;
 }
 
-#album-info{
-font-size:18px;
-margin-bottom:20px;
-color:#ccc;
+.album-cover{
+width:140px;
+border-radius:8px;
+box-shadow:0 0 12px rgba(0,0,0,0.6);
 }
+
+.album-title{
+font-size:18px;
+margin-top:10px;
+font-weight:bold;
+}
+
+.album-artist{
+font-size:14px;
+color:#bbb;
+}
+
+/* TABLE */
 
 table{
 width:100%;
 border-collapse:collapse;
+margin-top:20px;
 }
 
 th{
