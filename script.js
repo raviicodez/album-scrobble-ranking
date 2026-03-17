@@ -9,7 +9,7 @@ const users = [
 ]
 
 const artist = "BTS"
-const album = "BE"
+const album = "Arirang"
 
 
 async function loadAlbumCover(){
