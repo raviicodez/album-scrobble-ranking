@@ -1,19 +1,33 @@
 const API_KEY = "35fa1135e4537fe8cfb15fc69f95064e"
 
 const users = [
-"rkivedisc",
-"ikoodle",
-"lunacerq",
-"whybrubiss"
-  
+{ user: "rkivedisc", name: "Ravi" },
+{ user: "ikoodle", name: "Ikoo" },
+{ user: "lunacerq", name: "Luna" },
+{ user: "whybrubiss", name: "Bruno" },
+{ user: "antfrpjm", name: "Ant" }
 ]
 
 const artist = "BTS"
 const album = "BE"
 
 
-document.getElementById("album-info").innerHTML =
-`${artist} — ${album}`
+async function loadAlbumCover(){
+
+let url = `https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=${API_KEY}&artist=${encodeURIComponent(artist)}&album=${encodeURIComponent(album)}&format=json`
+
+let res = await fetch(url)
+let data = await res.json()
+
+let cover = data.album.image.pop()["#text"]
+
+document.getElementById("album-card").innerHTML = `
+<img class="album-cover" src="${cover}">
+<div class="album-title">${album}</div>
+<div class="album-artist">${artist}</div>
+`
+
+}
 
 
 async function getScrobbles(user){
@@ -46,13 +60,13 @@ async function buildRanking(){
 
 let results = []
 
-for(let user of users){
+for(let u of users){
 
-let count = await getScrobbles(user)
+let count = await getScrobbles(u.user)
 
 results.push({
-user:user,
-plays:count
+name: u.name,
+plays: count
 })
 
 }
@@ -74,7 +88,7 @@ if(i===2) medal="🥉"
 table.innerHTML += `
 <tr>
 <td class="medal">${medal || (i+1)}</td>
-<td>${r.user}</td>
+<td>${r.name}</td>
 <td>${r.plays}</td>
 </tr>
 `
@@ -83,4 +97,6 @@ table.innerHTML += `
 
 }
 
+
+loadAlbumCover()
 buildRanking()
