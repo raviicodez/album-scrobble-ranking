@@ -1,21 +1,53 @@
 body{
-font-family: Arial;
-background:#111;
+font-family: Arial, sans-serif;
+background:#0f0f0f;
 color:white;
 text-align:center;
 }
 
-table{
+.container{
+max-width:600px;
 margin:auto;
+padding:20px;
+}
+
+h1{
+margin-bottom:10px;
+}
+
+#album-info{
+font-size:18px;
+margin-bottom:20px;
+color:#ccc;
+}
+
+table{
+width:100%;
 border-collapse:collapse;
-width:60%;
 }
 
-th,td{
+th{
+background:#1f1f1f;
 padding:10px;
-border-bottom:1px solid #444;
 }
 
-tr:hover{
-background:#222;
+td{
+padding:10px;
+border-bottom:1px solid #333;
+}
+
+tr:nth-child(1){
+background:#3a2f00;
+}
+
+tr:nth-child(2){
+background:#2c2c2c;
+}
+
+tr:nth-child(3){
+background:#2a1d0a;
+}
+
+.medal{
+font-size:20px;
 }
