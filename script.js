@@ -1,3 +1,17 @@
+const API_KEY = "35fa1135e4537fe8cfb15fc69f95064e"
+
+const users = [
+"rkivedisc",
+"ikoodle",
+"lunacerq",
+"whybrubiss"
+  
+]
+
+const artist = "BTS"
+const album = "Map of the Soul: 7"
+
+
 document.getElementById("album-info").innerHTML =
 `${artist} — ${album}`
 
@@ -26,6 +40,7 @@ return parseInt(a.playcount)
 
 return 0
 }
+
 
 async function buildRanking(){
 
