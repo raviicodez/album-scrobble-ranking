@@ -2,11 +2,13 @@ const API_KEY = "35fa1135e4537fe8cfb15fc69f95064e"
 
 const users = [
 { user: "rkivedisc", name: "ravico" },
-{ user: "ikoodle", name: "babu" },
-{ user: "lunacerq", name: "lua" },
+{ user: "ikoodle", name: "min" },
+{ user: "closrjm", name: "lua" },
 { user: "whybrubiss", name: "bru" },
 { user: "antfrpjm", name: "bryce" },
-{ user: "ittsope", name: "sassá"}
+{ user: "ittsope", name: "sassá"},
+{ user: "rkimv", name: "senju"},
+{ user: "calicakitty", name: "cacau"},
 ]
 
 const artist = "BTS"
