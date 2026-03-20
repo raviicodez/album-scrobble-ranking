@@ -88,3 +88,10 @@ background:#2a1d0a;
 .medal{
 font-size:20px;
 }
+
+#total-scrobbles{
+margin:15px 0;
+font-size:16px;
+color:#ddd;
+font-weight:bold;
+}
