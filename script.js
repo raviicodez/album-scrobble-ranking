@@ -62,6 +62,7 @@ return 0
 async function buildRanking(){
 
 let results = []
+let total = 0
 
 for(let u of users){
 
@@ -72,13 +73,18 @@ name: u.name,
 plays: count
 })
 
+total += count
 }
 
 results.sort((a,b)=>b.plays-a.plays)
 
 let table = document.getElementById("ranking")
-
 table.innerHTML = ""
+
+// TOTAL DO GRUPO
+document.getElementById("total-scrobbles").innerHTML =
+`Total de scrobbles do grupo: ${total.toLocaleString()}`
+
 
 results.forEach((r,i)=>{
 
@@ -92,7 +98,7 @@ table.innerHTML += `
 <tr>
 <td class="medal">${medal || (i+1)}</td>
 <td>${r.name}</td>
-<td>${r.plays}</td>
+<td>${r.plays.toLocaleString()}</td>
 </tr>
 `
 
