@@ -90,8 +90,17 @@ font-size:20px;
 }
 
 #total-scrobbles{
-margin:15px 0;
+margin:20px auto;
+padding:15px 20px;
+max-width:400px;
+
+background:#000;
+border:1px solid #222;
+border-radius:10px;
+
 font-size:16px;
-color:#ddd;
 font-weight:bold;
+color:#fff;
+
+box-shadow:0 0 10px rgba(0,0,0,0.6);
 }
