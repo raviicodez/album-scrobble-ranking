@@ -1,8 +1,20 @@
+html, body{
+height:100%;
+}
+
 body{
 margin:0;
 font-family: Arial, sans-serif;
+
+/* fundo corrigido */
 background: linear-gradient(180deg, #2a0000, #120000);
+background-repeat: no-repeat;
+background-attachment: fixed;
+
 color:white;
+
+/* evita corte lateral */
+overflow-x:hidden;
 }
 
 /* TOPBAR */
@@ -13,10 +25,12 @@ top:0;
 left:0;
 width:100%;
 background:black;
-padding:8px 15px;
+padding:10px 12px;
+
 display:flex;
 justify-content:flex-end;
 align-items:center;
+
 box-sizing:border-box;
 z-index:1000;
 }
@@ -34,9 +48,10 @@ white-space:nowrap;
 
 .container{
 max-width:500px;
+width:100%;
 margin:auto;
-padding:60px 20px 30px;
-text-align:center;
+padding:70px 16px 30px;
+box-sizing:border-box;
 }
 
 /* TITLE */
@@ -45,8 +60,10 @@ text-align:center;
 font-size:32px;
 letter-spacing:3px;
 margin-bottom:20px;
-}
 
+text-align:center;   /* garante centralização */
+width:100%;          /* ocupa toda largura */
+}
 /* ALBUM */
 
 #album-card{
@@ -80,8 +97,17 @@ background:rgb(81, 61, 61);
 color:white;
 padding:12px 15px;
 border-radius:10px;
+
+/* 👇 ESSA LINHA resolve */
 margin:15px auto;
+
+/* garante centralização */
+text-align:center;
+display:block;
+
+/* evita ficar colado nas laterais */
 max-width:300px;
+
 font-size:14px;
 line-height:1.4;
 box-shadow:0 4px 12px rgba(0,0,0,0.4);
@@ -109,11 +135,11 @@ table{
 width:100%;
 border-collapse:collapse;
 margin-top:5px;
+font-size:14px;
 }
 
 th, td{
-text-align:left;
-padding:12px 10px;
+padding:10px 6px;
 }
 
 thead tr{
@@ -157,6 +183,13 @@ background:#2a0000;
 display:flex;
 align-items:center;
 gap:8px;
+min-width:0;
+}
+
+.user-cell span{
+overflow:hidden;
+text-overflow:ellipsis;
+white-space:nowrap;
 }
 
 .avatar{
@@ -177,17 +210,26 @@ transition: opacity 0.2s ease, transform 0.2s ease;
 
 @media (max-width: 500px){
 
-.container{
-padding:60px 10px 20px;
-}
-
 .title{
-font-size:24px;
+font-size:22px;
 }
 
-th, td{
-padding:10px 6px;
+.album-cover{
+width:100px;
+}
+
+#total-scrobbles{
 font-size:13px;
+padding:10px;
 }
 
+}
+
+#album-card{
+display:flex;
+flex-direction:column;
+align-items:center; /* centraliza horizontal */
+text-align:center;  /* garante texto no meio */
+margin:0 auto 20px; /* centraliza o bloco */
+max-width:300px;    /* evita ficar esticado */
 }
