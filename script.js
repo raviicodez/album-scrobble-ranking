@@ -17,7 +17,7 @@ const album = "Arirang"
 
 let globalResults = []
 
-// ALBUM
+// ALBUM (mantido igual)
 async function loadAlbumCover(){
 let url = `https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=${API_KEY}&artist=${encodeURIComponent(artist)}&album=${encodeURIComponent(album)}&format=json`
 let res = await fetch(url)
@@ -31,7 +31,7 @@ document.getElementById("album-card").innerHTML = `
 `
 }
 
-// AVATAR
+// AVATAR (mantido)
 async function getUserAvatar(user){
 let url = `https://ws.audioscrobbler.com/2.0/?method=user.getinfo&user=${user}&api_key=${API_KEY}&format=json`
 let res = await fetch(url)
@@ -43,7 +43,7 @@ let img = data.user.image
 return img[img.length-1]["#text"] || ""
 }
 
-// TOTAL
+// TOTAL (mantido)
 async function getScrobbles(user){
 let url = `https://ws.audioscrobbler.com/2.0/?method=user.gettopalbums&user=${user}&api_key=${API_KEY}&format=json&limit=1000`
 let res = await fetch(url)
@@ -62,15 +62,17 @@ return parseInt(a.playcount)
 return 0
 }
 
-// BUILD
-async function buildRanking(){
+// 🧠 NOVO: processamento em lotes (seguro)
+async function processInBatches(list, batchSize = 3){
 
-document.getElementById("loader").style.display = "table-row-group"
+let results = []
 
-let total = 0
-globalResults = []
+for(let i = 0; i < list.length; i += batchSize){
 
-for(let u of users){
+let batch = list.slice(i, i + batchSize)
+
+let batchResults = await Promise.all(
+batch.map(async (u)=>{
 
 let totalCount = await getScrobbles(u.user)
 let avatar = await getUserAvatar(u.user)
@@ -79,14 +81,31 @@ if(!avatar){
 avatar = "https://via.placeholder.com/26"
 }
 
-globalResults.push({
+return {
 name: u.name,
 avatar: avatar,
 total: totalCount
-})
-
-total += totalCount
 }
+
+})
+)
+
+results.push(...batchResults)
+}
+
+return results
+}
+
+// BUILD (otimizado sem quebrar)
+async function buildRanking(){
+
+document.getElementById("loader").style.display = "table-row-group"
+
+let total = 0
+
+globalResults = await processInBatches(users, 4)
+
+total = globalResults.reduce((sum, u)=> sum + u.total, 0)
 
 document.getElementById("total-scrobbles").innerHTML =
 `<strong>Total de scrobbles do grupo</strong><br>${total.toLocaleString()}`
@@ -96,7 +115,7 @@ renderTable()
 document.getElementById("loader").style.display = "none"
 }
 
-// RENDER
+// RENDER (igual)
 function renderTable(){
 
 let table = document.getElementById("ranking")
@@ -122,7 +141,7 @@ table.innerHTML += `
 <td>${medal || (i+1)}</td>
 <td class="user-cell">
 <img class="avatar" src="${r.avatar}">
-${r.name}
+<span>${r.name}</span>
 </td>
 <td>${r.total.toLocaleString()}</td>
 </tr>
