@@ -16,70 +16,57 @@ const artist = "BTS"
 const album = "Arirang"
 
 let globalResults = []
+let currentMode = "total"
 
-// ----------------------
-// ALBUM COVER
-// ----------------------
+// ALBUM
 async function loadAlbumCover(){
-
 let url = `https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=${API_KEY}&artist=${encodeURIComponent(artist)}&album=${encodeURIComponent(album)}&format=json`
-
 let res = await fetch(url)
 let data = await res.json()
-
-let cover = data.album?.image?.pop()?.["#text"] || ""
+let cover = data.album.image.pop()["#text"]
 
 document.getElementById("album-card").innerHTML = `
 <img class="album-cover" src="${cover}">
 <div class="album-title">${album}</div>
 <div class="album-artist">${artist}</div>
 `
-
 }
 
-// ----------------------
-// TOTAL (histórico)
-// ----------------------
-async function getScrobbles(user){
-
-try{
-
-let url = `/api?method=user.gettopalbums&user=${user}&api_key=${API_KEY}&format=json&limit=1000`
-
+// AVATAR
+async function getUserAvatar(user){
+let url = `https://ws.audioscrobbler.com/2.0/?method=user.getinfo&user=${user}&api_key=${API_KEY}&format=json`
 let res = await fetch(url)
-if(!res.ok) return 0
+let data = await res.json()
 
+if(!data.user) return ""
+
+let img = data.user.image
+return img[img.length-1]["#text"] || ""
+}
+
+// TOTAL
+async function getScrobbles(user){
+let url = `https://ws.audioscrobbler.com/2.0/?method=user.gettopalbums&user=${user}&api_key=${API_KEY}&format=json&limit=1000`
+let res = await fetch(url)
 let data = await res.json()
 
 if(!data.topalbums) return 0
 
-let albums = data.topalbums.album || []
-
-for(let a of albums){
-
+for(let a of data.topalbums.album){
 if(
-a.name?.toLowerCase() === album.toLowerCase() &&
-a.artist?.name?.toLowerCase() === artist.toLowerCase()
+a.name.toLowerCase() === album.toLowerCase() &&
+a.artist.name.toLowerCase() === artist.toLowerCase()
 ){
-return parseInt(a.playcount) || 0
+return parseInt(a.playcount)
 }
-
 }
-
-return 0
-
-}catch{
 return 0
 }
 
-}
-
-// ----------------------
-// DIÁRIO + SEMANAL
-// ----------------------
+// PERIODOS
 async function getScrobblesByPeriod(user){
 
-let now = Math.floor(Date.now() / 1000)
+let now = Math.floor(Date.now()/1000)
 let oneDayAgo = now - 86400
 let oneWeekAgo = now - 604800
 
@@ -89,20 +76,13 @@ let weekly = 0
 
 while(true){
 
-try{
-
-let url = `/api?method=user.getrecenttracks&user=${user}&api_key=${API_KEY}&format=json&limit=200&page=${page}`
-
+let url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${user}&api_key=${API_KEY}&format=json&limit=200&page=${page}`
 let res = await fetch(url)
-if(!res.ok) break
-
 let data = await res.json()
 
 if(!data.recenttracks) break
 
-let tracks = data.recenttracks.track || []
-if(!Array.isArray(tracks)) tracks = [tracks]
-
+let tracks = data.recenttracks.track
 if(!tracks.length) break
 
 let stop = false
@@ -119,50 +99,38 @@ break
 }
 
 if(
-t.album &&
-t.artist &&
-t.album["#text"] &&
-t.artist["#text"] &&
 t.album["#text"].toLowerCase() === album.toLowerCase() &&
 t.artist["#text"].toLowerCase() === artist.toLowerCase()
 ){
-
 if(ts >= oneDayAgo) daily++
 if(ts >= oneWeekAgo) weekly++
-
 }
-
 }
 
 if(stop) break
 page++
-
-}catch{
-break
-}
-
 }
 
 return { daily, weekly }
-
 }
 
-// ----------------------
-// BUILD RANKING
-// ----------------------
+// BUILD
 async function buildRanking(){
 
-globalResults = []
+document.getElementById("loader").style.display = "table-row-group"
 
 let total = 0
+globalResults = []
 
 for(let u of users){
 
 let totalCount = await getScrobbles(u.user)
 let period = await getScrobblesByPeriod(u.user)
+let avatar = await getUserAvatar(u.user)
 
 globalResults.push({
 name: u.name,
+avatar: avatar,
 total: totalCount,
 daily: period.daily,
 weekly: period.weekly
@@ -172,21 +140,26 @@ total += totalCount
 }
 
 document.getElementById("total-scrobbles").innerHTML =
-`<strong>Total de scrobbles do grupo: </strong>${total.toLocaleString()}`
+`<strong>Total de scrobbles do grupo</strong><br>${total.toLocaleString()}`
 
-renderTable("total")
+renderTable()
 
+document.getElementById("loader").style.display = "none"
 }
 
-// ----------------------
 // RENDER
-// ----------------------
-function renderTable(mode = "total"){
+function renderTable(){
 
 let table = document.getElementById("ranking")
+
+table.style.opacity = 0
+table.style.transform = "translateY(5px)"
+
+setTimeout(()=>{
+
 table.innerHTML = ""
 
-let sorted = [...globalResults].sort((a,b)=>b[mode]-a[mode])
+let sorted = [...globalResults].sort((a,b)=>b[currentMode]-a[currentMode])
 
 sorted.forEach((r,i)=>{
 
@@ -197,31 +170,35 @@ if(i===2) medal="🥉"
 
 table.innerHTML += `
 <tr>
-<td class="medal">${medal || (i+1)}</td>
-<td>${r.name}</td>
-<td>${r[mode].toLocaleString()}</td>
+<td>${medal || (i+1)}</td>
+<td class="user-cell">
+<img class="avatar" src="${r.avatar}">
+${r.name}
+</td>
+<td>${r[currentMode].toLocaleString()}</td>
 </tr>
 `
-
 })
 
+table.style.opacity = 1
+table.style.transform = "translateY(0)"
+
+},150)
 }
 
-// ----------------------
-// EVENTO ABAS
-// ----------------------
-document.querySelectorAll(".tab").forEach(tab=>{
-tab.addEventListener("click", ()=>{
+// TABS
+document.querySelectorAll(".tab").forEach(btn=>{
+btn.addEventListener("click", ()=>{
 
-document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"))
-tab.classList.add("active")
+document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"))
+btn.classList.add("active")
 
-let mode = tab.dataset.mode
-renderTable(mode)
+currentMode = btn.dataset.mode
+renderTable()
 
 })
 })
 
-// ----------------------
+// INIT
 loadAlbumCover()
 buildRanking()
