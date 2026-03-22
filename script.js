@@ -1,5 +1,6 @@
 const API_KEY = "35fa1135e4537fe8cfb15fc69f95064e"
 
+
 const users = [
 { user: "rkivedisc", name: "ravico" },
 { user: "ikoodle", name: "min" },
@@ -11,6 +12,7 @@ const users = [
 { user: "calicakitty", name: "cacau"},
 { user: "yoonismo", name: "nabi"},
 ]
+
 
 const artist = "BTS"
 const album = "Arirang"
