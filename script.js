@@ -16,7 +16,6 @@ const artist = "BTS"
 const album = "Arirang"
 
 let globalResults = []
-let currentMode = "total"
 
 // ALBUM
 async function loadAlbumCover(){
@@ -63,57 +62,6 @@ return parseInt(a.playcount)
 return 0
 }
 
-// PERIODOS
-async function getScrobblesByPeriod(user){
-
-let now = Math.floor(Date.now()/1000)
-let oneDayAgo = now - 86400
-let oneWeekAgo = now - 604800
-
-let page = 1
-let daily = 0
-let weekly = 0
-
-while(true){
-
-let url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${user}&api_key=${API_KEY}&format=json&limit=200&page=${page}`
-let res = await fetch(url)
-let data = await res.json()
-
-if(!data.recenttracks) break
-
-let tracks = data.recenttracks.track
-if(!tracks.length) break
-
-let stop = false
-
-for(let t of tracks){
-
-if(!t.date) continue
-
-let ts = parseInt(t.date.uts)
-
-if(ts < oneWeekAgo){
-stop = true
-break
-}
-
-if(
-t.album["#text"].toLowerCase() === album.toLowerCase() &&
-t.artist["#text"].toLowerCase() === artist.toLowerCase()
-){
-if(ts >= oneDayAgo) daily++
-if(ts >= oneWeekAgo) weekly++
-}
-}
-
-if(stop) break
-page++
-}
-
-return { daily, weekly }
-}
-
 // BUILD
 async function buildRanking(){
 
@@ -125,15 +73,16 @@ globalResults = []
 for(let u of users){
 
 let totalCount = await getScrobbles(u.user)
-let period = await getScrobblesByPeriod(u.user)
 let avatar = await getUserAvatar(u.user)
+
+if(!avatar){
+avatar = "https://via.placeholder.com/26"
+}
 
 globalResults.push({
 name: u.name,
 avatar: avatar,
-total: totalCount,
-daily: period.daily,
-weekly: period.weekly
+total: totalCount
 })
 
 total += totalCount
@@ -159,7 +108,7 @@ setTimeout(()=>{
 
 table.innerHTML = ""
 
-let sorted = [...globalResults].sort((a,b)=>b[currentMode]-a[currentMode])
+let sorted = [...globalResults].sort((a,b)=>b.total-a.total)
 
 sorted.forEach((r,i)=>{
 
@@ -175,7 +124,7 @@ table.innerHTML += `
 <img class="avatar" src="${r.avatar}">
 ${r.name}
 </td>
-<td>${r[currentMode].toLocaleString()}</td>
+<td>${r.total.toLocaleString()}</td>
 </tr>
 `
 })
@@ -185,19 +134,6 @@ table.style.transform = "translateY(0)"
 
 },150)
 }
-
-// TABS
-document.querySelectorAll(".tab").forEach(btn=>{
-btn.addEventListener("click", ()=>{
-
-document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"))
-btn.classList.add("active")
-
-currentMode = btn.dataset.mode
-renderTable()
-
-})
-})
 
 // INIT
 loadAlbumCover()
