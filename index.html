@@ -9,13 +9,17 @@
 
 <body>
 
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="group-name">Rancho do cubryce</div>
+</div>
+
 <div class="container">
 
 <h1 class="title">ARIRANKING</h1>
 
 <div id="album-card"></div>
 
-<!-- ABAS -->
 <div class="tabs">
   <button class="tab active" data-mode="total">Geral</button>
   <button class="tab" data-mode="weekly">Semanal</button>
@@ -25,6 +29,7 @@
 <div id="total-scrobbles"></div>
 
 <table>
+
 <thead>
 <tr>
 <th>#</th>
@@ -33,12 +38,36 @@
 </tr>
 </thead>
 
+<tbody id="loader">
+<tr>
+<td>1</td>
+<td><div class="skeleton-row"></div></td>
+<td><div class="skeleton-row"></div></td>
+</tr>
+<tr>
+<td>2</td>
+<td><div class="skeleton-row"></div></td>
+<td><div class="skeleton-row"></div></td>
+</tr>
+<tr>
+<td>3</td>
+<td><div class="skeleton-row"></div></td>
+<td><div class="skeleton-row"></div></td>
+</tr>
+<tr>
+<td>4</td>
+<td><div class="skeleton-row"></div></td>
+<td><div class="skeleton-row"></div></td>
+</tr>
+</tbody>
+
 <tbody id="ranking"></tbody>
+
 </table>
 
 </div>
 
-<script src="script.js?v=4"></script>
+<script src="script.js?v=7"></script>
 
 </body>
 </html>
