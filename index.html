@@ -9,35 +9,36 @@
 
 <body>
 
-<header>
-<div class="header-title">ARIRANCHO DO CUBRYCE</div>
-</header>
-
 <div class="container">
 
-<h1>🏆 ARIRANKING </h1>
+<h1 class="title">ARIRANKING</h1>
 
 <div id="album-card"></div>
-  
+
+<!-- ABAS -->
+<div class="tabs">
+  <button class="tab active" data-mode="total">Geral</button>
+  <button class="tab" data-mode="weekly">Semanal</button>
+  <button class="tab" data-mode="daily">Diário</button>
+</div>
+
 <div id="total-scrobbles"></div>
 
 <table>
-
 <thead>
 <tr>
 <th>#</th>
-<th>Member</th>
+<th>User</th>
 <th>Scrobbles</th>
 </tr>
 </thead>
 
 <tbody id="ranking"></tbody>
-
 </table>
 
 </div>
 
-<script src="script.js?v=2"></script>
+<script src="script.js?v=4"></script>
 
 </body>
 </html>
