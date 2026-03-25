@@ -10,6 +10,7 @@ const users = [
 { user: "rkimv", name: "senju"},
 { user: "calicakitty", name: "cacau"},
 { user: "yoonismo", name: "nabi"},
+{ user: "stsouzx", name: "ste"},
 ]
 
 const artist = "BTS"
